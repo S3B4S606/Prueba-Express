@@ -1,7 +1,7 @@
 import express from 'express';
 
 const app = express();
-const port = 3000;
+const port = 3030;
 
 app.get("/", (_, res) => {
     res.send("Aprendiendo express,ficha 3407181");
