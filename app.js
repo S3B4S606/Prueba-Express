@@ -1,10 +1,10 @@
 import express from 'express';
 
 const app = express();
-const port = 3000;
+const port = process.env.port || 3000;
 
 app.get("/", (_, res) => {
-    res.send("Aprendiendo express,ficha 3407181");
+    res.send("API REST - Aprendices");
 });
 
 app.listen(port, () => {
