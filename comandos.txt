@@ -1,0 +1,9 @@
+INICIAR SERVIDOR, y se vean cambios segun el codigo:
+node --watch app.js 
+
+OTRO COMANDO PARA INICIAR EL SERVIDOR, configurado package.json
+npm run dev
+
+borrar configuraciones
+git config --global --unset user.name
+git config --global --unset user.email
