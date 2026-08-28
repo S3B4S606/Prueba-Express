@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PUERTO || 3030
 //uso de middleware body-parse
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
 app.get("/", (_, res) => {
 res.send('Aprendiendo express,ficha 3407181, programa ADSO, 31 de Julio');
@@ -69,6 +70,18 @@ app.post("/login", (req, res)=>{
     //Si el perfil no existe
     return res.send("El perfil no existe. Acceso denegad")
 })
+
+//endpoint para enviar datos formdata
+app.post("/formulario", (req, res)=>{
+    const datosForm = req.body
+    const miNombre = req.body.nombre
+    const miApellido = req.body.apellido
+    const miCargo = req.body.cargo
+    if(!miNombre || !miApellido || !miCargo){
+        return res.send("Datos incompletos")}
+    res.status(200).json({Mensaje: "Datos recibidos", nombre: miNombre, apellido: miApellido, cargo: miCargo })
+})
+    
 
 app.listen(port, function(){
     console.log( `SERVIDOR: http://localhost:${port} `)
