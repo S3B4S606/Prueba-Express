@@ -1,0 +1,8 @@
+Crear la carpeta "utilidades"
+Dentro de utilidades, crear el archivo "validaciones.js" y exportarlo
+Import en el archivo "app.js" las validaciones
+
+validaciones:
+    El nombre minimo 3 letras
+    El correo electronico validarlo con expresiones regulares
+    General un id automatico

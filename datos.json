@@ -38,5 +38,12 @@
     "Edad": "20",
     "Correo": "sebas20@example.com",
     "Imagen": "/misImagenes/1789140068422.jpg"
+  },
+  {
+    "Nombre": "Sebas",
+    "Edad": "20",
+    "Correo": "sebas20@example.com",
+    "Imagen": "/misImagenes/1789143342683.jpg",
+    "id": 1
   }
 ]

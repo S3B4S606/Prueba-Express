@@ -22,9 +22,14 @@ const almacenamiento = multer.diskStorage({
 
 const subirArchivo = multer({storage: almacenamiento})
 
+// IMPORTAR VALIDACIONES 
+const { validarNombre, validarCorreo, generarId } = require("./Utilidades/validaciones");
+
 //middleware body-parse; formate los datos enviados
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+
+
 
 //endpoint raiz
 app.get("/", (_, res) => {
@@ -47,6 +52,18 @@ app.get("/api/aprendices", (req, res)=>{
 app.post("/api/aprendices", subirArchivo.single("Imagen"), (req, res)=>{
     //validar que se envien los datos
     const nuevoAprendiz = req.body
+    // validar nombre
+    if (!validarNombre(nuevoAprendiz.Nombre)) {
+        return res.status(400).json({
+            Error: "El nombre debe tener mínimo 3 letras."
+        })
+    }
+    // validar correo
+    if (!validarCorreo(nuevoAprendiz.Correo)) {
+        return res.status(400).json({
+            Error: "El correo electrónico no es válido."
+        })
+    }
     nuevoAprendiz.Imagen = req.file?`/misImagenes/${req.file.filename}`: "Sin imagen"
     //utilizamos la lectura del archivo
     sistemaArchivo.readFile(rutaArchivoJson, "utf-8", (error, datos)=>{
@@ -54,6 +71,8 @@ app.post("/api/aprendices", subirArchivo.single("Imagen"), (req, res)=>{
             return res.json({Error: "No se puede leer los datos"})
         }
         const listaAprendices = JSON.parse(datos)
+        // GENERAR ID AUTOMÁTICAMENTE
+        nuevoAprendiz.id = generarId(listaAprendices)
         //agregar el nuevo aprendiz
         listaAprendices.push(nuevoAprendiz)
         //escribir en el archivo
@@ -65,6 +84,8 @@ app.post("/api/aprendices", subirArchivo.single("Imagen"), (req, res)=>{
         })
     })
 })
+
+
 
 //EL servidor en funcionamiento, la escucha
 app.listen(port, () => {
