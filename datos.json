@@ -32,5 +32,11 @@
     "nombre": "juan",
     "perfil": "instructor",
     "correo": "juan@example.com"
+  },
+  {
+    "Nombre": "Sebastian",
+    "Edad": "20",
+    "Correo": "sebas20@example.com",
+    "Imagen": "/misImagenes/1789140068422.jpg"
   }
 ]
