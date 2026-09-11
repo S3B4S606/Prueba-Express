@@ -9,6 +9,9 @@ const ruta = require("path")
 const rutaArchivoJson = ruta.join(__dirname, "datos.json")
 //importar libreria para subir archivos
 const multer = require("multer")
+//Importacion de middleware personales
+const registroMiddleware = require("./middleware/registroMiddleware")
+
 //configurar almacenamiento
 const almacenamiento = multer.diskStorage({
     destination: (req, filem, cb)=>{
@@ -29,7 +32,14 @@ const { validarNombre, validarCorreo, generarId } = require("./Utilidades/valida
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+//middelware creados, se ejecuta cada ves que hago peticion(GET, POST, PUT, DELETE)
+app.use((req, res, next)=>{
+    console.log(`tiempo milisegundo: ${Date.now()}`)
+    console.log(`fecha: ${new Date().toISOString()}`)
+    next()
+})
 
+app.use(registroMiddleware)
 
 //endpoint raiz
 app.get("/", (_, res) => {
@@ -85,7 +95,15 @@ app.post("/api/aprendices", subirArchivo.single("Imagen"), (req, res)=>{
     })
 })
 
+//endpoint para modificar 
+app.put("/api/aprendices/:id", (req, res)=>{
+    res.status(200).json ({mensaje: "Endpoint en construcción de modificar"})
+})
 
+//endpoint para eliminar
+app.delete("/api/aprendices/:id", (req, res)=>{
+    res.status(200).json ({mensaje: "Endpoint en construcción de eliminar"})
+})
 
 //EL servidor en funcionamiento, la escucha
 app.listen(port, () => {
