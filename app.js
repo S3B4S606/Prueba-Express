@@ -1,16 +1,19 @@
-require('dotenv').config();
-const { error } = require('console');
+require('dotenv').config()
+const { error } = require('console')
 const express = require('express')
-const app = express();
-const port = process.env.port || 3030;
+const app = express()
+const port = process.env.port || 3030
 //configurar para la lectura del archivo
 const sistemaArchivo = require("fs")
 const ruta = require("path")
 const rutaArchivoJson = ruta.join(__dirname, "datos.json")
 //importar libreria para subir archivos
 const multer = require("multer")
+const jwt = require("jsonwebtoken")
 //Importacion de middleware personales
 const registroMiddleware = require("./middleware/registroMiddleware")
+const manejadorErrores = require("./middleware/manejadorErrores")
+const autenticarMiddleware = require("./middleware/autenticarMiddleware")
 
 //configurar almacenamiento
 const almacenamiento = multer.diskStorage({
@@ -104,6 +107,38 @@ app.put("/api/aprendices/:id", (req, res)=>{
 app.delete("/api/aprendices/:id", (req, res)=>{
     res.status(200).json ({mensaje: "Endpoint en construcción de eliminar"})
 })
+
+//provocar error, utilizo nexts
+app.get("/error", (req, res, next) => {
+    next(new Error("Error intencional para probrar."))
+})
+
+//ruta protegida
+app.get("/rutaprotegida", autenticarMiddleware ,(req, res) => {
+    res.json({mensaje: "Esta ruta esta protegida."})
+})
+
+//endpoint inciar sesion, generar token
+app.post("/login", (req, res)=>{
+    //capturar usuario y clave
+    const {usuario, clave} = req.body
+    //Simular usuario de base de datos
+    const usuarioBd = {"user": "Sebastian", "clave": "abc123"}
+    //verficar datos
+    if(usuario !== usuarioBd.user || clave !== usuarioBd.clave){
+        res.json({mensaje: "Credenciales incorrectas."})
+    }
+    //generar token
+    const token = jwt.sign(
+        {usuario: usuario}, 
+        process.env.JWT_SECRET, 
+        {expiresIn: "2h"}
+    )
+    res.json({token: token})
+})
+
+//uso del middleware de errores
+app.use(manejadorErrores)
 
 //EL servidor en funcionamiento, la escucha
 app.listen(port, () => {
